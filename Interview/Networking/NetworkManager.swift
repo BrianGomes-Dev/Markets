@@ -12,7 +12,7 @@ import Foundation
 class NetworkManager {
     
     static let shared = NetworkManager() 
-    private init() {}
+    init() {}
     
     func fetchMarkets(completion: @escaping (Result<[Market], Error>) -> Void) {
         let urlString = "http://localhost:8080/api/general/money-am-quote-delayed?ticker=UKX,MCX,NMX,ASX,SMX,AIM1,IXIC,INDU,DEX."

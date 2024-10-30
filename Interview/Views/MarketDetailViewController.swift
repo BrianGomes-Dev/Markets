@@ -29,5 +29,29 @@ class MarketDetailViewController: UIViewController {
         currentPriceLabel.text = "\(market.currency) \(market.price)"
         tradeHighLabel.text = "\(market.currency) \(market.highTradePrice)"
         tradeLowLabel.text = "\(market.currency) \(market.lowTradePrice)"
+        
+        setupAccessibility(for: market)
+    }
+    
+    private func setupAccessibility(for market: Market) {
+        companyNameLabel.isAccessibilityElement = true
+        companyNameLabel.accessibilityLabel = "Company Name"
+        companyNameLabel.accessibilityValue = market.name
+        companyNameLabel.accessibilityIdentifier = "companyNameLabel"
+        
+        currentPriceLabel.isAccessibilityElement = true
+        currentPriceLabel.accessibilityLabel = "Current Price"
+        currentPriceLabel.accessibilityValue = "\(market.currency) \(market.price)"
+        currentPriceLabel.accessibilityIdentifier = "currentPriceLabel"
+        
+        tradeHighLabel.isAccessibilityElement = true
+        tradeHighLabel.accessibilityLabel = "High Trade Price"
+        tradeHighLabel.accessibilityValue = "\(market.currency) \(market.highTradePrice)"
+        tradeHighLabel.accessibilityIdentifier = "tradeHighLabel"
+        
+        tradeLowLabel.isAccessibilityElement = true
+        tradeLowLabel.accessibilityLabel = "Low Trade Price"
+        tradeLowLabel.accessibilityValue = "\(market.currency) \(market.lowTradePrice)"
+        tradeLowLabel.accessibilityIdentifier = "tradeLowLabel"
     }
 }

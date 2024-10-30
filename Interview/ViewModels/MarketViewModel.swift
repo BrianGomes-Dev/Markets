@@ -12,10 +12,15 @@ public class MarketViewModel {
     var markets: [Market] = []
     var filteredMarkets: [Market] = []
     var reloadTableView: (() -> Void)?
+    var networkmanager: NetworkManager?
     private var searchWorkItem: DispatchWorkItem?
     
+    init(networkmanager: NetworkManager) {
+        self.networkmanager = networkmanager
+    }
+    
     func loadMarkets() {
-        NetworkManager.shared.fetchMarkets { [weak self] result in
+        networkmanager?.fetchMarkets { [weak self] result in
             guard let self = self else { return }
             
             switch result {

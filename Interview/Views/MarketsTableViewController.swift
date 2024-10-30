@@ -10,7 +10,7 @@ import UIKit
 
 class MarketsTableViewController: UITableViewController, UISearchResultsUpdating {
     
-    private var viewModel = MarketViewModel()
+    private var viewModel = MarketViewModel(networkmanager: NetworkManager.shared)
     private var dataSource: UITableViewDiffableDataSource<Section, Market>?
     private var searchController = UISearchController(searchResultsController: nil)
     
@@ -32,12 +32,14 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
     }
     
     private func configureSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Markets"
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-    }
+            searchController.searchResultsUpdater = self
+            searchController.obscuresBackgroundDuringPresentation = false
+            searchController.searchBar.placeholder = "Search Markets"
+            searchController.searchBar.accessibilityLabel = "Market search bar"
+            searchController.searchBar.accessibilityIdentifier = "marketSearchBar"
+            navigationItem.searchController = searchController
+            definesPresentationContext = true
+        }
     
     private func configureDataSource() {
         dataSource = UITableViewDiffableDataSource<Section, Market>(tableView: tableView) { tableView, indexPath, market in
@@ -45,6 +47,10 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
             
             cell.textLabel?.text = "\(market.epic) \(market.name)"
             cell.detailTextLabel?.text = market.price
+            
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = "\(market.name), Current Price: \(market.currency) \(market.price)"
+            cell.accessibilityIdentifier = "marketCell_\(indexPath.row)"
             
             return cell
         }
