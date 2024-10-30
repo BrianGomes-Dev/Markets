@@ -14,6 +14,7 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
     private var dataSource: UITableViewDiffableDataSource<Section, Market>?
     private var searchController = UISearchController(searchResultsController: nil)
     private var filteredMarkets: [Market] = []
+    private var searchWorkItem: DispatchWorkItem?
     
     enum Section {
         case main
@@ -68,16 +69,24 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
-            filteredMarkets = viewModel.markets
-            applySnapshot()
-            return
+        searchWorkItem?.cancel()
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
+                self.filteredMarkets = self.viewModel.markets
+                self.applySnapshot()
+                return
+            }
+            
+            self.filteredMarkets = self.viewModel.markets.filter { market in
+                market.name.lowercased().contains(searchText)
+            }
+            
+            self.applySnapshot()
         }
         
-        filteredMarkets = viewModel.markets.filter { market in
-            market.name.lowercased().contains(searchText)
-        }
-        
-        applySnapshot()
+        searchWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
     }
 }
