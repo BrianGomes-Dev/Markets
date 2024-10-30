@@ -89,4 +89,23 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
         searchWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+           if segue.identifier == "showMarketDetail",
+              let destinationVC = segue.destination as? MarketDetailViewController,
+              let selectedMarket = sender as? Market {
+               destinationVC.market = selectedMarket
+           }
+       }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+               // Deselect row after selection
+               tableView.deselectRow(at: indexPath, animated: true)
+               
+               // Get the selected market
+               let selectedMarket = isFiltering() ? filteredMarkets[indexPath.row] : viewModel.markets[indexPath.row]
+               
+               // Perform segue and pass the selected market
+               performSegue(withIdentifier: "showMarketDetail", sender: selectedMarket)
+    }
 }

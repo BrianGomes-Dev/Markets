@@ -18,6 +18,7 @@
 		D393224D2CD1F62B00965BBD /* MarketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393224C2CD1F62B00965BBD /* MarketViewModel.swift */; };
 		D393224F2CD1F66200965BBD /* MarketsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393224E2CD1F66200965BBD /* MarketsTableViewController.swift */; };
 		D39322512CD1F6AE00965BBD /* Market.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39322502CD1F6AE00965BBD /* Market.swift */; };
+		D39322592CD2132F00965BBD /* MarketDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39322582CD2132F00965BBD /* MarketDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		D393224C2CD1F62B00965BBD /* MarketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketViewModel.swift; sourceTree = "<group>"; };
 		D393224E2CD1F66200965BBD /* MarketsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketsTableViewController.swift; sourceTree = "<group>"; };
 		D39322502CD1F6AE00965BBD /* Market.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Market.swift; sourceTree = "<group>"; };
+		D39322582CD2132F00965BBD /* MarketDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		D39322472CD1F59200965BBD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D39322582CD2132F00965BBD /* MarketDetailViewController.swift */,
 				D393224E2CD1F66200965BBD /* MarketsTableViewController.swift */,
 				8B6CE37722562CA800A73A87 /* LaunchScreen.storyboard */,
 				8B6CE37222562CA600A73A87 /* Main.storyboard */,
@@ -264,6 +267,7 @@
 				D393224D2CD1F62B00965BBD /* MarketViewModel.swift in Sources */,
 				8B6CE37122562CA600A73A87 /* MarketsTableViewController-old.swift in Sources */,
 				8B6CE36F22562CA600A73A87 /* AppDelegate.swift in Sources */,
+				D39322592CD2132F00965BBD /* MarketDetailViewController.swift in Sources */,
 				8B98F71427183E95006B59A2 /* NetworkInterceptor.swift in Sources */,
 				D393224F2CD1F66200965BBD /* MarketsTableViewController.swift in Sources */,
 				D39322512CD1F6AE00965BBD /* Market.swift in Sources */,
