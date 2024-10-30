@@ -9,26 +9,24 @@
 import XCTest
 @testable import Interview
 
-class InterviewTests: XCTestCase {
+class MarketViewModelTests: XCTestCase {
+    var viewModel: MarketViewModel!
 
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        viewModel = MarketViewModel()
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testMarketLoading() {
+        let expectation = XCTestExpectation(description: "Load markets data")
+        
+        viewModel.reloadTableView = {
+            expectation.fulfill()
         }
+        
+        viewModel.loadMarkets()
+        
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertEqual(viewModel.numberOfMarkets(), 9) // Change 10 to the expected number of mock entries
     }
-
 }
