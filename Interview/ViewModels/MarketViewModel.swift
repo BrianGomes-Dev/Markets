@@ -6,48 +6,61 @@
 //  Copyright © 2024 AJBell. All rights reserved.
 //
 
-
-import UIKit
-
-import Foundation
 import UIKit
 
 public class MarketViewModel {
     var markets: [Market] = []
+    var filteredMarkets: [Market] = []
     var reloadTableView: (() -> Void)?
-
+    private var searchWorkItem: DispatchWorkItem?
+    
     func loadMarkets() {
-        let url = "http://localhost:8080/api/general/money-am-quote-delayed?ticker=UKX,MCX,NMX,ASX,SMX,AIM1,IXIC,INDU,DEX."
-        var request = URLRequest(url: URL(string: url)!)
-        request.addValue("Mock", forHTTPHeaderField: "Client")
-
-        let configuration = URLSessionConfiguration.default
-        configuration.protocolClasses = [NetworkInterceptor.self]
-        let defaultSession = URLSession(configuration: configuration)
-
-        defaultSession.dataTask(with: request) { [weak self] (data, response, error) in
+        NetworkManager.shared.fetchMarkets { [weak self] result in
             guard let self = self else { return }
-
-            if let data = data {
-                do {
-                    let decodedResponse = try JSONDecoder().decode(MarketResponse.self, from: data)
-                    self.markets = decodedResponse.data
-                    
-                    DispatchQueue.main.async {
-                        self.reloadTableView?()
-                    }
-                } catch {
-                    print("Failed to decode JSON:", error)
+            
+            switch result {
+            case .success(let markets):
+                self.markets = markets
+                self.filteredMarkets = markets
+                
+                DispatchQueue.main.async {
+                    self.reloadTableView?()
                 }
+                
+            case .failure(let error):
+                print("Failed to fetch markets:", error)
             }
-        }.resume()
+        }
+    }
+    
+    func market(for indexPath: IndexPath, isFiltering: Bool) -> Market {
+        return isFiltering ? filteredMarkets[indexPath.row] : markets[indexPath.row]
     }
 
-    func market(for indexPath: IndexPath) -> Market {
-        return markets[indexPath.row]
+    func numberOfMarkets(isFiltering: Bool) -> Int {
+        return isFiltering ? filteredMarkets.count : markets.count
     }
-
-    func numberOfMarkets() -> Int {
-        return markets.count
+    
+    func filterMarkets(with query: String?) {
+        searchWorkItem?.cancel()
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self, let query = query, !query.isEmpty else {
+                self?.filteredMarkets = self?.markets ?? []
+                self?.reloadTableView?()
+                return
+            }
+            
+            self.filteredMarkets = self.markets.filter {
+                $0.name.lowercased().contains(query.lowercased())
+            }
+            
+            DispatchQueue.main.async {
+                self.reloadTableView?()
+            }
+        }
+        
+        searchWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
     }
 }

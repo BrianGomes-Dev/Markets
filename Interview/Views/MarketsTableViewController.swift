@@ -13,8 +13,6 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
     private var viewModel = MarketViewModel()
     private var dataSource: UITableViewDiffableDataSource<Section, Market>?
     private var searchController = UISearchController(searchResultsController: nil)
-    private var filteredMarkets: [Market] = []
-    private var searchWorkItem: DispatchWorkItem?
     
     enum Section {
         case main
@@ -56,56 +54,34 @@ class MarketsTableViewController: UITableViewController, UISearchResultsUpdating
         var snapshot = NSDiffableDataSourceSnapshot<Section, Market>()
         snapshot.appendSections([.main])
         
-        let marketsToDisplay = isFiltering() ? filteredMarkets : viewModel.markets
-        snapshot.appendItems(marketsToDisplay)
+        let isFiltering = isFilteringActive()
+        snapshot.appendItems(isFiltering ? viewModel.filteredMarkets : viewModel.markets)
         
-        if let dataSource = dataSource {
-            dataSource.apply(snapshot, animatingDifferences: true)
-        }
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
     
-    private func isFiltering() -> Bool {
+    private func isFilteringActive() -> Bool {
         return searchController.isActive && !(searchController.searchBar.text?.isEmpty ?? true)
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        searchWorkItem?.cancel()
-        
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
-            guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
-                self.filteredMarkets = self.viewModel.markets
-                self.applySnapshot()
-                return
-            }
-            
-            self.filteredMarkets = self.viewModel.markets.filter { market in
-                market.name.lowercased().contains(searchText)
-            }
-            
-            self.applySnapshot()
-        }
-        
-        searchWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+        viewModel.filterMarkets(with: searchController.searchBar.text)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-           if segue.identifier == "showMarketDetail",
-              let destinationVC = segue.destination as? MarketDetailViewController,
-              let selectedMarket = sender as? Market {
-               destinationVC.market = selectedMarket
-           }
-       }
+        if segue.identifier == "showMarketDetail",
+           let destinationVC = segue.destination as? MarketDetailViewController,
+           let selectedMarket = sender as? Market {
+            destinationVC.market = selectedMarket
+        }
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-               // Deselect row after selection
-               tableView.deselectRow(at: indexPath, animated: true)
-               
-               // Get the selected market
-               let selectedMarket = isFiltering() ? filteredMarkets[indexPath.row] : viewModel.markets[indexPath.row]
-               
-               // Perform segue and pass the selected market
-               performSegue(withIdentifier: "showMarketDetail", sender: selectedMarket)
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let isFiltering = isFilteringActive()
+        let selectedMarket = viewModel.market(for: indexPath, isFiltering: isFiltering)
+        
+        performSegue(withIdentifier: "showMarketDetail", sender: selectedMarket)
     }
 }

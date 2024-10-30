@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8B6CE36F22562CA600A73A87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6CE36E22562CA600A73A87 /* AppDelegate.swift */; };
-		8B6CE37122562CA600A73A87 /* MarketsTableViewController-old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6CE37022562CA600A73A87 /* MarketsTableViewController-old.swift */; };
 		8B6CE37422562CA600A73A87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B6CE37222562CA600A73A87 /* Main.storyboard */; };
 		8B6CE37622562CA800A73A87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B6CE37522562CA800A73A87 /* Assets.xcassets */; };
 		8B6CE37922562CA800A73A87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B6CE37722562CA800A73A87 /* LaunchScreen.storyboard */; };
@@ -19,6 +18,7 @@
 		D393224F2CD1F66200965BBD /* MarketsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393224E2CD1F66200965BBD /* MarketsTableViewController.swift */; };
 		D39322512CD1F6AE00965BBD /* Market.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39322502CD1F6AE00965BBD /* Market.swift */; };
 		D39322592CD2132F00965BBD /* MarketDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39322582CD2132F00965BBD /* MarketDetailViewController.swift */; };
+		D393225C2CD21C4100965BBD /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393225B2CD21C4100965BBD /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +34,6 @@
 /* Begin PBXFileReference section */
 		8B6CE36B22562CA600A73A87 /* Interview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Interview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6CE36E22562CA600A73A87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8B6CE37022562CA600A73A87 /* MarketsTableViewController-old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarketsTableViewController-old.swift"; sourceTree = "<group>"; };
 		8B6CE37322562CA600A73A87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B6CE37522562CA800A73A87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B6CE37822562CA800A73A87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -48,6 +47,7 @@
 		D393224E2CD1F66200965BBD /* MarketsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketsTableViewController.swift; sourceTree = "<group>"; };
 		D39322502CD1F6AE00965BBD /* Market.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Market.swift; sourceTree = "<group>"; };
 		D39322582CD2132F00965BBD /* MarketDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketDetailViewController.swift; sourceTree = "<group>"; };
+		D393225B2CD21C4100965BBD /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,11 +90,11 @@
 			isa = PBXGroup;
 			children = (
 				D393224B2CD1F5EB00965BBD /* App */,
-				D393224A2CD1F5B400965BBD /* Resources */,
-				D39322492CD1F5A800965BBD /* ViewModels */,
 				D39322482CD1F59C00965BBD /* Models */,
 				D39322472CD1F59200965BBD /* Views */,
-				8B6CE37022562CA600A73A87 /* MarketsTableViewController-old.swift */,
+				D39322492CD1F5A800965BBD /* ViewModels */,
+				D393224A2CD1F5B400965BBD /* Resources */,
+				D393225A2CD21C2E00965BBD /* Networking */,
 				8B98F71227183E63006B59A2 /* Interceptor */,
 			);
 			path = Interview;
@@ -160,6 +160,14 @@
 				8B6CE36E22562CA600A73A87 /* AppDelegate.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		D393225A2CD21C2E00965BBD /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				D393225B2CD21C4100965BBD /* NetworkManager.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,9 +273,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D393224D2CD1F62B00965BBD /* MarketViewModel.swift in Sources */,
-				8B6CE37122562CA600A73A87 /* MarketsTableViewController-old.swift in Sources */,
 				8B6CE36F22562CA600A73A87 /* AppDelegate.swift in Sources */,
 				D39322592CD2132F00965BBD /* MarketDetailViewController.swift in Sources */,
+				D393225C2CD21C4100965BBD /* NetworkManager.swift in Sources */,
 				8B98F71427183E95006B59A2 /* NetworkInterceptor.swift in Sources */,
 				D393224F2CD1F66200965BBD /* MarketsTableViewController.swift in Sources */,
 				D39322512CD1F6AE00965BBD /* Market.swift in Sources */,
