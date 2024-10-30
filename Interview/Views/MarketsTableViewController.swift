@@ -8,10 +8,12 @@
 
 import UIKit
 
-class MarketsTableViewController: UITableViewController {
+class MarketsTableViewController: UITableViewController, UISearchResultsUpdating {
     
     private var viewModel = MarketViewModel()
     private var dataSource: UITableViewDiffableDataSource<Section, Market>?
+    private var searchController = UISearchController(searchResultsController: nil)
+    private var filteredMarkets: [Market] = []
     
     enum Section {
         case main
@@ -20,6 +22,7 @@ class MarketsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureSearchController()
         configureDataSource()
         
         viewModel.reloadTableView = { [weak self] in
@@ -27,6 +30,14 @@ class MarketsTableViewController: UITableViewController {
         }
         
         viewModel.loadMarkets()
+    }
+    
+    private func configureSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Markets"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     private func configureDataSource() {
@@ -43,10 +54,30 @@ class MarketsTableViewController: UITableViewController {
     private func applySnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Market>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(viewModel.markets)
+        
+        let marketsToDisplay = isFiltering() ? filteredMarkets : viewModel.markets
+        snapshot.appendItems(marketsToDisplay)
         
         if let dataSource = dataSource {
             dataSource.apply(snapshot, animatingDifferences: true)
         }
+    }
+    
+    private func isFiltering() -> Bool {
+        return searchController.isActive && !(searchController.searchBar.text?.isEmpty ?? true)
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
+            filteredMarkets = viewModel.markets
+            applySnapshot()
+            return
+        }
+        
+        filteredMarkets = viewModel.markets.filter { market in
+            market.name.lowercased().contains(searchText)
+        }
+        
+        applySnapshot()
     }
 }
