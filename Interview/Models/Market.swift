@@ -6,15 +6,18 @@
 //  Copyright © 2024 AJBell. All rights reserved.
 //
 
+struct Market: Codable {
+    let epic: String
+    let name: String
+    let price: String
 
-class Market {
-    var name: String
-    var epic: String
-    var price: String
-    
-    init(name: String, epic: String, price: String) {
-        self.name = name
-        self.epic = epic
-        self.price = price
+    private enum CodingKeys: String, CodingKey {
+        case epic = "Epic"
+        case name = "CompanyName"
+        case price = "CurrentPrice"
     }
+}
+
+struct MarketResponse: Codable {
+    let data: [Market]
 }
