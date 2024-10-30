@@ -6,7 +6,7 @@
 //  Copyright © 2024 AJBell. All rights reserved.
 //
 
-struct Market: Codable {
+struct Market: Codable, Hashable {
     let epic: String
     let name: String
     let price: String
